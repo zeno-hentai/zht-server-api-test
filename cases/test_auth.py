@@ -1,4 +1,4 @@
-from test.utils.api import ZHTSessionTest
+from utils.api import ZHTSessionTest
 
 
 class TestAuth(ZHTSessionTest):

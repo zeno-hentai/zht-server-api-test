@@ -1,5 +1,8 @@
 import unittest
-import test
+import cases
 
 if __name__ == '__main__':
-    unittest.main()
+    loader = unittest.TestLoader()
+    suite = loader.discover('cases', 'test_*.py')
+    runner = unittest.TextTestRunner()
+    runner.run(suite)
