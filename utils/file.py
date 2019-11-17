@@ -17,6 +17,7 @@ class ZHTIndexData(NamedTuple):
     meta: Mapping[str, str]
     key: str
     tags: List[str]
+    previewFile: str
     files: Mapping[str, str]
 
     def encrypted_meta(self, public_key):
@@ -24,6 +25,7 @@ class ZHTIndexData(NamedTuple):
             "encryptedMeta": rsa_encrypt_str(json.dumps(self.meta), public_key),
             "encryptedKey": rsa_encrypt_str(self.key, public_key),
             "encryptedTags": [rsa_encrypt_str(t, public_key) for t in self.tags],
+            "previewFile": self.previewFile,
             "files": list(self.files.keys())
         }
 
@@ -37,6 +39,7 @@ class ZHTIndexData(NamedTuple):
                             encryptedMeta: str,
                             encryptedKey: str,
                             encryptedTags: List[str],
+                            previewFile: str,
                             encryptedFiles: Mapping[str, str]
                             ) -> 'ZHTIndexData':
         key = rsa_decrypt_str(encryptedKey, private_key)
@@ -47,6 +50,7 @@ class ZHTIndexData(NamedTuple):
                 rsa_decrypt_str(t, private_key)
                 for t in encryptedTags
             ],
+            previewFile = previewFile,
             files={
                 nm: aes_decrypt_str(content, key)
                 for nm, content in encryptedFiles.items()
@@ -92,6 +96,7 @@ def data_by_index(index: int, tag_num: int, file_num: int) -> ZHTIndexData:
         key=key,
         tags=[f"标签_{i}" for i in range(tag_num)],
         files={f"file_{i}": f"内容_{i}" for i in range(file_num)},
+        previewFile='file_0'
     )
 
 

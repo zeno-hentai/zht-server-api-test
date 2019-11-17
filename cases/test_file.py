@@ -81,6 +81,7 @@ class FileTest(ZHTSessionTest):
         encryptedKey = dt['encryptedKey']
         encryptedMeta = dt['encryptedMeta']
         encryptedTags = dt['tags']
+        previewFile = dt['previewFile']
         encryptedFiles = {
             nm: self.get_file_data(nm)
             for nm in self.get_file_list(item_id)
@@ -93,6 +94,7 @@ class FileTest(ZHTSessionTest):
             private_key=privateKey,
             encryptedKey=encryptedKey,
             encryptedMeta=encryptedMeta,
+            previewFile = previewFile,
             encryptedTags=[t['encryptedTag'] for t in encryptedTags],
             encryptedFiles=encryptedFiles
         )
@@ -143,7 +145,8 @@ class FileTest(ZHTSessionTest):
         ]
         for orig, item in zip(items, results):
             self.assertEqual(orig.meta, item.meta)
-            self.assertEqual(item.key, item.key)
+            self.assertEqual(orig.key, item.key)
+            self.assertEqual(orig.files.get(orig.previewFile), item.files.get(item.previewFile))
             self.assertEqual(set(orig.tags), set(item.tags))
             self.assertEqual(set(orig.files.values()), set(item.files.values()))
 
