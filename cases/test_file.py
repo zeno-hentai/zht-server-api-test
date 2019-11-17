@@ -155,6 +155,7 @@ class FileTest(ZHTSessionTest):
         public_key = self.get_public_key()
         item = data_by_index(0, 10, 20)
         item_id = self.upload_file(item, public_key)
+        self.get_paging(1)
         tag_id = self.add_tag(item_id, test_tag, public_key)
         item2 = self.get_item_by_id(item_id)
         self.assertTrue(test_tag in item2.tags)
@@ -162,3 +163,4 @@ class FileTest(ZHTSessionTest):
         item3 = self.get_item_by_id(item_id)
         self.assertFalse(test_tag in item3.tags)
         self.delete_item(item_id)
+        self.get_paging(0)
